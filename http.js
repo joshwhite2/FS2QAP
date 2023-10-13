@@ -9,6 +9,7 @@ const server = http.createServer((req, res) => {
     let filePath = "./views/";
     // Emit the route as an event
     urlEmitter.emit(url); 
+    //determine route
 
     switch (url) {
         case '/about':
@@ -22,6 +23,12 @@ const server = http.createServer((req, res) => {
             break;
         case '/subscribe':
             filePath += "subscribe.html";
+            break;
+        case '/weather':
+            filePath +="weather.html";
+            break;
+        case '/info':
+            filePath +="info.html";
             break;
         default:
             filePath += "index.html";
