@@ -1,7 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const urlEmitter = require('./emitter');
-
+const logEvents = require('./eventLog')
 //Create a server
 const server = http.createServer((req, res) => {
     const url = req.url;
@@ -28,6 +28,11 @@ const server = http.createServer((req, res) => {
             break;
     }
 
+    // Log the timestamp
+    const timestamp = new Date(); // Create a timestamp
+    logEvents('File Read', 'INFO', `File ${filePath} successfully loaded`);
+    logEvents('Server Called', 'INFO', `Server called at: ${timestamp.toISOString()}`);
+
     // Read the HTML file and serve it as a response
     fs.readFile(filePath, (err, data) => {
         if (err) {
@@ -35,7 +40,8 @@ const server = http.createServer((req, res) => {
             res.writeHead(404, { 'Content-Type': 'text/plain' });
             res.end('Not Found');
         } else {
-            // console.log(`${url} page`); ->now proingvided by eventEmitter
+            // Emit the 'fileRead' event
+            urlEmitter.emit('fileRead', url); 
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end(data);
         }
