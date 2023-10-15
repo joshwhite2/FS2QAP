@@ -1,3 +1,26 @@
+
+/*
+5.	Every time a file was successfully read and write a message to the console.
+
+We would want to capture and log an event when a file was successfully read and written to the server, so that we can track interactions, and ensure the file system is being properly accessed.
+
+Below is an emitter that gets fired when a file is successfully read
+*/
+
+// define/extend an EventEmitter class
+const EventEmitter = require('events');
+class MyEmitter extends EventEmitter {};
+
+//Create a new Emitter
+
+const urlEmitter = new MyEmitter();
+
+// Listen for the 'fileRead' event and log a message
+urlEmitter.on('fileRead', (url) => {
+    console.log(`HTML file for route "${url}" has been properly read.`);
+});
+
+
 /*
 3.	Every time a specific route was accessed and write a message to the console
 
@@ -8,12 +31,8 @@ Below is an emitter that gets fired when a specific route is accessed on the ser
 */
 
 
-// define/extend an EventEmitter class
-const EventEmitter = require('events');
-class MyEmitter extends EventEmitter {};
+// we are able to re-use the same emitter, to log a different event
 
-// initialize an new emitter object
-const urlEmitter = new MyEmitter();
 
 urlEmitter.addListener('/about', () => console.log(`About Page`));
 urlEmitter.addListener('/subscribe', () => console.log(`Subscribe Page`));
@@ -21,5 +40,5 @@ urlEmitter.addListener('/contact', () => console.log(`Contact Page`));
 urlEmitter.addListener('/products', () => console.log(`Products Page`));
 urlEmitter.addListener('default', () => console.log(`Home Page`));
 
-// Emit the event in http.js when the server is created (line 11)
+// Emit the event in http.js when the server is created (lines 11 & 40 )
 module.exports = urlEmitter;

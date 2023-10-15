@@ -1,7 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const urlEmitter = require('./emitter');
-
+const logEvents = require('./eventLog')
 //Create a server
 const server = http.createServer((req, res) => {
     const url = req.url;
@@ -9,6 +9,7 @@ const server = http.createServer((req, res) => {
     let filePath = "./views/";
     // Emit the route as an event
     urlEmitter.emit(url); 
+    //determine route
 
     switch (url) {
         case '/about':
@@ -23,10 +24,21 @@ const server = http.createServer((req, res) => {
         case '/subscribe':
             filePath += "subscribe.html";
             break;
+        case '/weather':
+            filePath +="weather.html";
+            break;
+        case '/info':
+            filePath +="info.html";
+            break;
         default:
             filePath += "index.html";
             break;
     }
+
+    // Log the timestamp
+    const timestamp = new Date(); // Create a timestamp
+    logEvents('File Read', 'INFO', `File ${filePath} successfully loaded`);
+    logEvents('Server Called', 'INFO', `Server called at: ${timestamp.toISOString()}`);
 
     // Read the HTML file and serve it as a response
     fs.readFile(filePath, (err, data) => {
@@ -35,7 +47,8 @@ const server = http.createServer((req, res) => {
             res.writeHead(404, { 'Content-Type': 'text/plain' });
             res.end('Not Found');
         } else {
-            // console.log(`${url} page`); ->now proingvided by eventEmitter
+            // Emit the 'fileRead' event
+            urlEmitter.emit('fileRead', url); 
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end(data);
         }
