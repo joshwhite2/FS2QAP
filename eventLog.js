@@ -13,7 +13,7 @@ const logEvents = async (event, level, message) => {
 
     const dateTime = `${format(now, 'yyyyMMdd\tHH:mm:ss')}`;
     const logItem = `${dateTime}\t${level}\t${event}\t${message}\t${uuid()}`;
-// Check if foler is created, if not create it
+// Check if folder is created, if not create it
     try {
         const logsPath = path.join(__dirname, 'logs', year, month, day);
         if (!fs.existsSync(logsPath)) {

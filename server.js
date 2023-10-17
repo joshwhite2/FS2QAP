@@ -30,6 +30,9 @@ const server = http.createServer((req, res) => {
         case '/info':
             filePath +="info.html";
             break;
+        case'/ourteam':
+            filePath +="team.html"
+            break;
         default:
             filePath += "index.html";
             break;
